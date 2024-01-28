@@ -1,6 +1,7 @@
 <script>
   import FastBar from './lib/FastBar.svelte'
   import SlowBar from './lib/SlowBar.svelte'
+  import Pong from './lib/Pong.svelte'
 </script>
 
 <main class="container">
@@ -27,6 +28,9 @@
   </div>
   <div class="row">
     <FastBar />
+  </div>
+  <div class="row">
+    <Pong />
   </div>
   
 

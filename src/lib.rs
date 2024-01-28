@@ -1,5 +1,7 @@
 use std::sync::{mpsc::sync_channel, Arc, OnceLock};
 
+use async_stream::stream;
+use futures_core::Stream;
 use serde::{Deserialize, Serialize};
 use tauri::{
     async_runtime::spawn_blocking,
@@ -86,6 +88,22 @@ impl Receiver {
         .ok()
         .flatten()
     }
+
+    pub async fn listen<D: Deserialize<'static> + Send + 'static>(&self) -> impl Stream<Item = D> {
+        let (sender, receiver) = sync_channel(10);
+        let end_point = self.end_point.clone();
+
+        self.app_handle.listen_global(end_point, move |event| {
+            let _ = sender.send(event.payload().map(ustr));
+        });
+        stream! {
+            while let Ok(Some(val)) = receiver.recv() {
+                if let Ok(decoded) = serde_json::from_str(val.as_str()) {
+                    yield decoded;
+                }
+            }
+        }
+    }
 }
 
 /// Initializes the plugin. Must be callend in [tauri::Builder::plugin]
@@ -109,11 +127,11 @@ pub fn channel(app_handle: AppHandle) -> (Sender, Receiver, Channel) {
 
     (
         Sender(Arc::new(InternalSender {
-            end_point: end_point.clone(),
+            end_point: format!("{end_point}_fe"),
             app_handle: app_handle.clone(),
         })),
         Receiver {
-            end_point: end_point.clone(),
+            end_point: format!("{end_point}_be"),
             app_handle: app_handle.clone(),
         },
         Channel { end_point },
@@ -121,7 +139,7 @@ pub fn channel(app_handle: AppHandle) -> (Sender, Receiver, Channel) {
 }
 
 fn endpoint(id: Uuid) -> String {
-    format!("{PLUGIN_NAME}://{id}_endpoint")
+    format!("{PLUGIN_NAME}://{id}_mailbox")
 }
 
 fn ensure_is_initialized() {
