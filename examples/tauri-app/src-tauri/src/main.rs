@@ -1,9 +1,9 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::time::Duration;
 use futures_util::stream::StreamExt;
 use serde::{Deserialize, Serialize};
+use std::time::Duration;
 use tauri::{async_runtime::spawn, AppHandle};
 use tauri_plugin_channel::{channel, Channel, Receiver, Sender};
 use tokio::{pin, select, time::sleep};
@@ -23,7 +23,7 @@ enum ProgressFrontendEvents {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 enum PongEvents {
     Ping,
-    Pong
+    Pong,
 }
 
 #[tauri::command]
