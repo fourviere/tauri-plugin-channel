@@ -101,13 +101,13 @@ emit(channel, "1");
 
 ### Prepare
 
-1. Install dependencies of frontend API the plugin.
+1. Install dependencies of frontend API.
 
 ```bash
 npm install 
 ```
 
-1. Build frontend API the plugin.
+1. Build frontend API.
 
 ```bash
 npm build

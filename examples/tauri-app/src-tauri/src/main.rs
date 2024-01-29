@@ -32,9 +32,11 @@ fn pong(app_handle: AppHandle) -> Channel {
 
     spawn(async move {
         let stream = receiver.listen::<PongEvents>().await;
+        let mut count = 0;
         pin!(stream);
         while let Some(value) = stream.next().await {
-            println!("Got {value:?}");
+            count += 1;
+            println!("Got {count}x {value:?}");
             let next_value = match value {
                 PongEvents::Ping => PongEvents::Pong,
                 PongEvents::Pong => PongEvents::Ping,
