@@ -13,5 +13,5 @@ serde = "1.0"
 serde_json = "1.0"
 tauri = { version = "1.5.4" }
 tokio-stream = "0.1.14"
-ustr = "0.10.0"
+ustr = "1.0.0"
 uuid = {version = "1.6.1", features = ["v7", "fast-rng", "serde"] }
