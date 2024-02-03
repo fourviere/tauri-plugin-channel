@@ -14,13 +14,13 @@ Channel is a Tauri plugin that provides an ergonomic layer for creating “scope
 
 ### Common Use Case
 
-Image a download manager application that shows different progress bar for each file being downloaded from the backend. 
+Imagine a download manager application that shows different progress bar for each file being downloaded from the backend. 
 
 A classic Tauri app :
 - Should know and manage different event name, one for each download
 - Alternatively, provides a custom partition mechanism in the event payload to distinguish events receiver
 
-Using Channel, each `fn download (link: String)` from backend will return its channel where download progress event will be published from backend and are visible only to frontend component that owns that channel.
+Using Channel, each `fn download (link: String)` from backend will return its channel where download progress events will be published from backend and are visible only to frontend component that owns that channel.
 
 
 ## Installation
