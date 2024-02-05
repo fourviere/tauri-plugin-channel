@@ -1,5 +1,5 @@
 {
-  "gitSiteUrl": "https://www.github.com/your-org/tauri-plugin-channel/",
+  "gitSiteUrl": "https://github.com/fourviere/tauri-plugin-channel/",
   "pkgManagers": {
     "rust": {
       "version": true,
@@ -75,12 +75,12 @@
   },
   "packages": {
     "tauri-plugin-channel": {
-      "path": ".",
+      "path": "./packages/plugin",
       "manager": "rust",
       "releaseTag": "crate-v${ pkgFile.version }"
     },
     "tauri-plugin-channel-api": {
-      "path": ".",
+      "path": "./packages/plugin",
       "manager": "javascript",
       "dependencies": [
         "tauri-plugin-channel"
