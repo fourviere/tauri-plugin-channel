@@ -47,6 +47,7 @@ fn pong(app_handle: AppHandle) -> Channel {
     });
     channel
 }
+
 #[tauri::command]
 fn fast_progress(app_handle: AppHandle) -> Channel {
     let (sender, receiver, channel) = channel(app_handle);

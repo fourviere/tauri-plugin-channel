@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { invoke } from "@tauri-apps/api/tauri"
-  import {listen, emit} from "tauri-plugin-channel-api"
-  import type {Channel} from "tauri-plugin-channel-api"
+  import {channel} from "tauri-plugin-channel-api"
+  import type {Sender, Receiver} from "tauri-plugin-channel-api"
   import type {ProgressFrontendEvents, ProgressBackendEvents} from "src/types.d.ts"
 
   let msg = "Not yet Started"
-  let channel: Channel
+  let sender: Sender
+  let receiver: Receiver
   let start_button_enabled = true 
   let stop_button_enabled = false 
 
   async function start() {
-    channel = await invoke("slow_progress")
+    [sender, receiver]  = await channel("slow_progress");
     stop_button_enabled = true
     start_button_enabled = false
-    await listen<ProgressBackendEvents>(channel, (event) => {
+    await receiver.listen<ProgressBackendEvents>(event => {
       msg = JSON.stringify(event)
       if (msg === '"Stopped"' || msg === '"Done"') {
         start_button_enabled = true
@@ -23,8 +23,8 @@
   }
 
   async function stop() {
-    if (channel!== undefined && channel!== null) {
-      await emit<ProgressFrontendEvents>(channel, "Stop")
+    if (sender!== undefined && sender!== null) {
+      await sender.emit<ProgressFrontendEvents>("Stop")
     }
   }
 </script>

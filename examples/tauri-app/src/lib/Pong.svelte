@@ -1,23 +1,22 @@
 <script lang="ts">
-    import { invoke } from "@tauri-apps/api/tauri"
-    import {listen, emit} from "tauri-plugin-channel-api"
-    import type {Channel} from "tauri-plugin-channel-api"
+    import {channel} from "tauri-plugin-channel-api"
+    import type {Sender, Receiver} from "tauri-plugin-channel-api"
     import type {PongEvents} from "src/types.d.ts"
   
     let msg = "Not yet Started"
-    let channel: Channel
+    let sender: Sender
+    let receiver: Receiver
     let button_enabled = true 
   
     async function start() {
-      channel = await invoke("pong")
+      [sender, receiver]  = await channel("pong")
       button_enabled = false
       let pong_count = 0
-      await emit<PongEvents>(channel, "Ping")
-      await listen<PongEvents>(channel, (event) => {
+      await sender.emit<PongEvents>("Ping")
+      await receiver.listen<PongEvents>(event => {
         pong_count++
-        msg = pong_count + "x " + JSON.stringify(event)
-        console.log("fff")
-        emit<PongEvents>(channel, "Ping")
+        msg = pong_count + "x " + event
+        sender.emit<PongEvents>("Ping")
       })
     }
 </script>

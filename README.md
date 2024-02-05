@@ -70,7 +70,7 @@ enum BackendEvents {
 }
 
 #[tauri::command]
-fn example_function (app_handle: AppHandle) {
+fn example_function (app_handle: AppHandle) -> Channel {
     let (sender, receiver, channel) = channel(app_handle);
     tokio::spawn({
         for i in 0..100
@@ -80,21 +80,23 @@ fn example_function (app_handle: AppHandle) {
     tokio::spawn({
         println!(receiver.once::<String>().await)
     });
+    channel
 }
 ```
 
 ### Frontend
 
-Use the `receive, emit` functions to receive or send events to/from backend
+Use the `Receiver.receive, Sender.emit` functions to receive or send events to/from backend
 
 ```typescript
-import { receive, emit, Channel } from 'tauri-plugin-channel';
-import {listen, emit} from "tauri-plugin-channel-api"
-import type {Channel} from "tauri-plugin-channel-api"
+import {channel} from "tauri-plugin-channel-api"
+import type {Sender, Receiver} from "tauri-plugin-channel-api"
 
-let channel = await invoke<Channel>('example_function')
-receive(channel, (event) => console.log(event));
-emit(channel, "1");
+type BackendEvents = { Progress: number } 
+
+[sender, receiver]  = await channel('example_function')
+receiver.listen<BackendEvents>(event => console.log(JSON.stringify(event)));
+sender.emit(channel, "1");
 ```
 
 ## Example App

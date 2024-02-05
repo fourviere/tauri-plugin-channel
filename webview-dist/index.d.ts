@@ -1,10 +1,11 @@
-import { UnlistenFn } from '@tauri-apps/api/event';
-declare type ReceiveCallback<T> = (payload: T) => void;
-export declare type Channel = {
-    readonly end_point: string;
-    unlisten: UnlistenFn;
-};
-export declare function listen<T>(receiver: Channel, handler: ReceiveCallback<T>): Promise<void>;
-export declare function once<T>(receiver: Channel, handler: ReceiveCallback<T>): Promise<void>;
-export declare function emit<T>(transmitter: Channel, data: T): Promise<void>;
+import { InvokeArgs } from "@tauri-apps/api/tauri";
+type ReceiveCallback<T> = (payload: T) => void;
+export interface Sender {
+    emit<T>(data: T): Promise<void>;
+}
+export interface Receiver {
+    listen<T>(handler: ReceiveCallback<T>): Promise<void>;
+    once<T>(handler: ReceiveCallback<T>): Promise<void>;
+}
+export declare function channel(cmd: string, args?: InvokeArgs): Promise<[Sender, Receiver]>;
 export {};
