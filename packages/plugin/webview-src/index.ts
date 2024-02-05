@@ -45,19 +45,38 @@ class InternalSender extends EndPoint implements Sender {
 
 class InternalReceiver extends EndPoint implements Receiver {
   private unlisten?: UnlistenFn;
+  private active: boolean = true;
 
   constructor(end_point: string) {
     super(end_point + "_fe");
   }
 
+  private receiver_checks(): boolean {
+    if (!this.active) {
+      console.error("Rust Senders have been dropped");
+      return false;
+    }
+
+    if (this.unlisten === null) {
+      console.error("Another listen|once function is still running");
+      return false;
+    }
+
+    return true;
+  }
+
   async listen<T>(handler: ReceiveCallback<T>): Promise<void> {
+    if (!this.receiver_checks()) return;
+
     const wrapped_handler = (event: Event<Data<T>>) => {
       if (event.payload === "Unlisten") {
+        this.active = false;
         if (this.unlisten !== undefined) this.unlisten();
         return;
       }
       handler(event.payload.Message);
     };
+
     this.unlisten = await listen_event<Data<T>>(
       this.end_point,
       wrapped_handler,
@@ -65,13 +84,18 @@ class InternalReceiver extends EndPoint implements Receiver {
   }
 
   async once<T>(handler: ReceiveCallback<T>): Promise<void> {
+    if (!this.receiver_checks()) return;
+
     const wrapped_handler = (event: Event<Data<T>>) => {
       if (event.payload !== "Unlisten") {
         handler(event.payload.Message);
-        return;
+      } else {
+        this.active = false;
       }
+
       if (this.unlisten !== undefined) this.unlisten();
     };
+
     this.unlisten = await once_event<Data<T>>(this.end_point, wrapped_handler);
   }
 }
