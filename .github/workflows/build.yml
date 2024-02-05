@@ -36,20 +36,29 @@ jobs:
       - name: Rust cache   
         uses: Swatinem/rust-cache@v2
 
+      - name: Npm dependencies
+        run: npm install
+
+      - name: EsLint check
+        run: npm run lintcheck
+
+      - name: Type check
+        run: npm run typecheck
+
       - name: Cargo fmt lib
-        run: cargo fmt --manifest-path=Cargo.toml --all -- --check
+        run: cargo fmt --manifest-path=packages/plugin/Cargo.toml --all -- --check
 
       - name:  Cargo clippy lib
-        run: cargo clippy --manifest-path=Cargo.toml --all-targets --all-features -- -D warnings
+        run: cargo clippy --manifest-path=packages/plugin/Cargo.toml --all-targets --all-features -- -D warnings
       
       - name: Cargo build lib
-        run: cargo build --manifest-path=Cargo.toml
+        run: cargo build --manifest-path=packages/plugin/Cargo.toml
 
       - name: Cargo fmt example-app
-        run: cargo fmt --manifest-path=examples/tauri-app/src-tauri/Cargo.toml --all -- --check
+        run: cargo fmt --manifest-path=packages/examples/tauri-app/src-tauri/Cargo.toml --all -- --check
 
-      - name:  Cargo clippy example-app
-        run: cargo clippy --manifest-path=examples/tauri-app/src-tauri/Cargo.toml --all-targets --all-features -- -D warnings
+      - name: Cargo clippy example-app
+        run: cargo clippy --manifest-path=packages/examples/tauri-app/src-tauri/Cargo.toml --all-targets --all-features -- -D warnings
 
       - name: Cargo build example-app
-        run: cargo build --manifest-path=examples/tauri-app/src-tauri/Cargo.toml
+        run: cargo build --manifest-path=packages/examples/tauri-app/src-tauri/Cargo.toml

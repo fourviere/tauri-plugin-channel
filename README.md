@@ -103,27 +103,14 @@ sender.emit(channel, "1");
 
 ### Prepare
 
-1. Install dependencies of frontend API.
+1. Install dependencies.
 
 ```bash
 npm install 
 ```
 
-1. Build frontend API.
+2. Build the app
 
 ```bash
-npm build
-```
-
-2. Install dependencies of example app.
-
-```bash
-cd examples/tauri-app
-npm install
-```
-
-3. Start example app.
-
-```bash
-npm tauri dev
+npm run dev
 ```

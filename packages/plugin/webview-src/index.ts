@@ -17,23 +17,23 @@ type Channel = {
 };
 
 export interface Sender {
-  emit<T>(data: T): Promise<void> 
+  emit<T>(data: T): Promise<void>;
 }
 
 export interface Receiver {
-  listen<T>(handler: ReceiveCallback<T>): Promise<void>
-  once<T>(handler: ReceiveCallback<T>): Promise<void>
+  listen<T>(handler: ReceiveCallback<T>): Promise<void>;
+  once<T>(handler: ReceiveCallback<T>): Promise<void>;
 }
 
 abstract class EndPoint {
-  readonly end_point: string 
+  readonly end_point: string;
 
   constructor(end_point: string) {
     this.end_point = end_point;
   }
 }
 
-class InternalSender extends EndPoint implements Sender{
+class InternalSender extends EndPoint implements Sender {
   constructor(end_point: string) {
     super(end_point + "_be");
   }
@@ -42,7 +42,6 @@ class InternalSender extends EndPoint implements Sender{
     await emit_event(this.end_point, data);
   }
 }
-
 
 class InternalReceiver extends EndPoint implements Receiver {
   private unlisten?: UnlistenFn;
