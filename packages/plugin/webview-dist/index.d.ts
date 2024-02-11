@@ -6,6 +6,7 @@ export interface Sender {
 export interface Receiver {
     listen<T>(handler: ReceiveCallback<T>): Promise<void>;
     once<T>(handler: ReceiveCallback<T>): Promise<void>;
+    unlisten(): void;
 }
 export declare function channel(cmd: string, args?: InvokeArgs): Promise<[Sender, Receiver]>;
 export {};

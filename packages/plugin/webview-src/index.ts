@@ -23,6 +23,7 @@ export interface Sender {
 export interface Receiver {
   listen<T>(handler: ReceiveCallback<T>): Promise<void>;
   once<T>(handler: ReceiveCallback<T>): Promise<void>;
+  unlisten(): void;
 }
 
 abstract class EndPoint {
@@ -44,7 +45,7 @@ class InternalSender extends EndPoint implements Sender {
 }
 
 class InternalReceiver extends EndPoint implements Receiver {
-  private unlisten?: UnlistenFn;
+  private unlisten_fn?: UnlistenFn;
   private active: boolean = true;
 
   constructor(end_point: string) {
@@ -57,12 +58,18 @@ class InternalReceiver extends EndPoint implements Receiver {
       return false;
     }
 
-    if (this.unlisten === null) {
+    if (this.unlisten_fn !== undefined) {
       console.error("Another listen|once function is still running");
       return false;
     }
 
     return true;
+  }
+
+  unlisten(): void {
+    if (this.unlisten_fn === undefined) return;
+    this.unlisten_fn();
+    delete this.unlisten_fn;
   }
 
   async listen<T>(handler: ReceiveCallback<T>): Promise<void> {
@@ -71,13 +78,13 @@ class InternalReceiver extends EndPoint implements Receiver {
     const wrapped_handler = (event: Event<Data<T>>) => {
       if (event.payload === "Unlisten") {
         this.active = false;
-        if (this.unlisten !== undefined) this.unlisten();
+        this.unlisten();
         return;
       }
       handler(event.payload.Message);
     };
 
-    this.unlisten = await listen_event<Data<T>>(
+    this.unlisten_fn = await listen_event<Data<T>>(
       this.end_point,
       wrapped_handler,
     );
@@ -93,10 +100,13 @@ class InternalReceiver extends EndPoint implements Receiver {
         this.active = false;
       }
 
-      if (this.unlisten !== undefined) this.unlisten();
+      this.unlisten();
     };
 
-    this.unlisten = await once_event<Data<T>>(this.end_point, wrapped_handler);
+    this.unlisten_fn = await once_event<Data<T>>(
+      this.end_point,
+      wrapped_handler,
+    );
   }
 }
 
