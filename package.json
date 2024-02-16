@@ -1,5 +1,5 @@
 {
-  "name": "@fourviere/tauri-plugin-channel-manifest",
+  "name": "@fourviere/tauri-plugin-channel",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
