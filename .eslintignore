@@ -1,0 +1,5 @@
+.eslintrc.cjs
+packages/**/svelte.config.js
+packages/**/vite.config.ts
+packages/**/dist
+packages/**/*.rs

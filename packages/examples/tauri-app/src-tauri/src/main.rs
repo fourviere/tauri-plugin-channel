@@ -27,7 +27,7 @@ enum PongEvents {
 }
 
 #[tauri::command]
-fn pong(app_handle: AppHandle) -> Channel {
+fn pong(app_handle: AppHandle) -> Option<Channel> {
     let (sender, receiver, channel) = channel(app_handle);
 
     spawn(async move {
@@ -45,13 +45,14 @@ fn pong(app_handle: AppHandle) -> Channel {
             sender.emit(next_value).await;
         }
     });
-    channel
+    Some(channel)
 }
+
 #[tauri::command]
-fn fast_progress(app_handle: AppHandle) -> Channel {
+fn fast_progress(app_handle: AppHandle) -> Result<Channel, ()> {
     let (sender, receiver, channel) = channel(app_handle);
     progress(sender, receiver, Duration::from_millis(100));
-    channel
+    Ok(channel)
 }
 
 #[tauri::command]

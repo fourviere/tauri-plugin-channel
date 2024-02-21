@@ -1,7 +1,7 @@
 <script>
-  import FastBar from './lib/FastBar.svelte'
-  import SlowBar from './lib/SlowBar.svelte'
-  import Pong from './lib/Pong.svelte'
+  import FastBar from "./lib/FastBar.svelte";
+  import SlowBar from "./lib/SlowBar.svelte";
+  import Pong from "./lib/Pong.svelte";
 </script>
 
 <main class="container">
@@ -19,9 +19,7 @@
     </a>
   </div>
 
-  <p>
-    Click on the Tauri, Vite, and Svelte logos to learn more.
-  </p>
+  <p>Click on the Tauri, Vite, and Svelte logos to learn more.</p>
 
   <div class="row">
     <SlowBar />
@@ -32,8 +30,6 @@
   <div class="row">
     <Pong />
   </div>
-  
-
 </main>
 
 <style>

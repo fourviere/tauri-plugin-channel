@@ -51,19 +51,19 @@ impl Drop for InternalSender {
 
 impl InternalSender {
     /// Emit event to frontend
-    async fn emit<S: Serialize + Clone + Send + 'static>(&self, payload: S) {
+    async fn emit<S: Serialize + Send + 'static>(&self, payload: S) {
         let send_event = self.end_point.clone();
         let app_handle = self.app_handle.clone();
 
         let _ = spawn_blocking(move || {
             let data = Data::Message(payload);
-            let _ = app_handle.emit_all(&send_event, data);
+            let _ = app_handle.emit_all(&send_event, &data);
         })
         .await;
     }
 }
 impl Sender {
-    pub async fn emit<S: Serialize + Clone + Send + 'static>(&self, payload: S) {
+    pub async fn emit<S: Serialize + Send + 'static>(&self, payload: S) {
         self.0.emit(payload).await;
     }
 }
