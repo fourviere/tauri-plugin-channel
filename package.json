@@ -1,8 +1,12 @@
 {
   "name": "@fourviere/tauri-plugin-channel",
   "version": "0.0.0",
-  "private": true,
   "license": "MIT",
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "directory": "packages/plugin/webview-dist"
+  },
   "scripts": {
     "prettier": "npm run prettier --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
