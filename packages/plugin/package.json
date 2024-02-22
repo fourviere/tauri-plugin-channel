@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "author": "fourviere-collective",
   "description": "",
+  "private": false,
   "browser": "webview-dist/index.js",
   "main": "webview-dist/index.js",
   "types": "webview-dist/index.d.ts",
