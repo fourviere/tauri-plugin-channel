@@ -1,10 +1,10 @@
 [package]
 name = "tauri-plugin-channel"
-version = "0.1.0"
+version = "0.2.0"
 authors = [ "fourviere-collective" ]
 description = ""
 edition = "2021"
-exclude = ["/webview-dist", "/webview-src", "node_modules"]
+exclude = [ "/webview-dist", "/webview-src", "node_modules" ]
 
 [dependencies]
 async-stream = "0.3.5"
@@ -14,4 +14,4 @@ serde_json = "1.0"
 tauri = { version = "1.5.4" }
 tokio-stream = "0.1.14"
 ustr = "1.0.0"
-uuid = {version = "1.6.1", features = ["v7", "fast-rng", "serde"] }
+uuid = { version = "1.6.1", features = [ "v7", "fast-rng", "serde" ] }
