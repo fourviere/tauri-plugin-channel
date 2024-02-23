@@ -2,7 +2,7 @@ name: covector version or publish
 on:
   push:
     branches:
-    - dev
+      - dev
 
 jobs:
   covector:
@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 12
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
 
       - name: cargo login
         run: cargo login ${{ secrets.ORG_CRATES_IO_TOKEN }}
@@ -28,19 +28,11 @@ jobs:
       - name: covector version-or-publish
         uses: jbolda/covector/packages/action@covector-v0
         id: covector
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          command: 'version-or-publish'
-          createRelease: true
-
-      - name: covector version or publish (publish when no change files present)
-        uses: jbolda/covector/packages/action@covector-v0
-        id: covector-node
         env:
           NODE_AUTH_TOKEN: ${{ secrets.ORG_NPM_TOKEN }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          command: 'version-or-publish'
+          command: "version-or-publish"
           createRelease: true
 
       - name: Create Pull Request With Versions Bumped
