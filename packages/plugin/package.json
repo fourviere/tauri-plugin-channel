@@ -21,7 +21,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "11.1.6",
     "rollup": "2.79.1",
-    "typescript": "5.3.3"
+    "typescript": "5.4.3"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.0.0",
